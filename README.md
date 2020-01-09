@@ -14,7 +14,7 @@
     ```sh
     # tpc-ds/v2.11.0rc2/tools/makefile
     # OS Values: AIX, LINUX, SOLARIS, NCR, HPUX
-    OS	=	LINUX 
+    OS = LINUX 
     ```
 
 3. Run `make` from the tools directory to compile the TPC-DS data generator for your environment. If you encounter any issues or want to learn more about using the tool, you can refer to the how-to guide at [tpc-ds/v2.11.0rc2/tools/How_To_Guide-DS-V2.0.0.docx](tpc-ds/v2.11.0rc2/tools/How_To_Guide-DS-V2.0.0.docx).
