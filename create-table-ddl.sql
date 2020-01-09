@@ -1,3 +1,11 @@
+create table dbgen_version
+(
+    dv_version                varchar(32),
+    dv_create_date            date       ,
+    dv_create_time            varchar(20),
+    dv_cmdline_args           varchar(200)                  
+);
+
 create table customer_address
 (
  ca_address_sk int4 not null ,
