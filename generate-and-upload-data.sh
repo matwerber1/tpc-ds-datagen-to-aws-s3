@@ -6,10 +6,14 @@
 # The total uncompressed size in GB of the TPC-DS dataset you want to generate:
 SCALE=1
 
-# Amazon S3 output bucket to store results: 
-S3_BUCKET=s3://werberm-sandbox
+# Amazon S3 output bucket to store results (do not include trailing slash): 
+S3_BUCKET=s3://<YOUR_BUCKET>
 
-# Amazon S3 prefix to store results: 
+# Amazon S3 prefix to store results. This will be added to the bucket path
+# above when determining where to upload your generated data. For example, if
+# your bucket is s3://my-bucket and your prefix (below) is my-tpc-data, your
+# final output will be in s3://my-bucket/my-tpc-data/*.
+# Below, do not include a trailing slash
 S3_USER_PREFIX=bigdata/tpc-ds
 
 # The full ARN of the IAM role that grants your Redshift cluster 
