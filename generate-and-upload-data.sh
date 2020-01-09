@@ -9,6 +9,9 @@ SCALE=1
 # Amazon S3 output bucket to store results (do not include trailing slash): 
 S3_BUCKET=s3://<YOUR_BUCKET>
 
+# Set this to your bucket region (must be in same region as your cluster)
+BUCKET_REGION=us-east-1
+
 # Amazon S3 prefix to store results. This will be added to the bucket path
 # above when determining where to upload your generated data. For example, if
 # your bucket is s3://my-bucket and your prefix (below) is my-tpc-data, your
@@ -83,7 +86,7 @@ do
   TABLE=$FILENAME
 
   # Generate the SQL to load our data from S3 to Redshift.
-  SQL="copy $TABLE from '$S3_FULL_PATH/$FILENAME/' iam_role '$IAM_ROLE' gzip delimiter '|' COMPUPDATE ON region 'us-east-1';"
+  SQL="copy $TABLE from '$S3_FULL_PATH/$FILENAME/' iam_role '$IAM_ROLE' gzip delimiter '|' COMPUPDATE ON ACCEPTINVCHARS region '$BUCKET_REGION';"
 
   # Write SQL to our sql script: 
   echo $SQL >> load_tables.sql
