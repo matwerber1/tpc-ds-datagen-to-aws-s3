@@ -38,10 +38,10 @@
     ./generate-and-upload-data.sh
     ```
 
-6. Connect to your Redshift cluster using the SQL client of your choice and execute the DDL commands below to create tables to hold your TPC-DS dataset. One option for a free client is [Aginity Pro](https://www.aginity.com/products/aginity-pro/).
+6. Connect to your Redshift cluster using the SQL client of your choice and execute the DDL commands below to create tables to hold your TPC-DS dataset (one option for a free SQL client is [Aginity Pro](https://www.aginity.com/products/aginity-pro/)):
 
     ```sql
     TODO: add DML statements here...
     ```
 
-7. The script from Step 5 generated a file named `load_tables.sql`, which contains SQL DML statements to COPY your table data from S3 into Redshift. Execute these commands in Redshift using your SQL client. 
+7. The script from Step 5 generated a file named `load_tables.sql`, which contains SQL DML statements to COPY your table data from S3 into Redshift. Execute these commands in Redshift using your SQL client to load data into your cluster. 
