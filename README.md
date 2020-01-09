@@ -44,4 +44,4 @@
 
 7. The script from Step 5 generated a file named `load_tables.sql` which contains SQL DML statements to COPY your table data from S3 into Redshift. Open this file, copy-paste the commands into your SQL client, and execute them to load data into your cluster from S3.
 
-8. TODO: Add steps to generate and run queries to test the data set and Redshift performance. 
+8. The script from Step 5 generated a file `'./queries/query_0.sql` which contains TPC-DS queries tailored for your data set size. You can use these sample queries to test your cluster performance, or you can write your own.

@@ -31,6 +31,9 @@ CURR_DIR=$(pwd)
 # Relative path to the data generation tool:
 TOOL_DIR=$CURR_DIR/tpc-ds/v2.11.0rc2/tools
 
+# Relative path to sample query templates: 
+QUERY_TEMPLATE_DIR=$CURR_DIR/tpc-ds/v2.11.0rc2/query_templates
+
 # Path where generated data will be stored:
 RAW_OUTPUT_DIR=$CURR_DIR/dataset/raw
 
@@ -38,12 +41,12 @@ RAW_OUTPUT_DIR=$CURR_DIR/dataset/raw
 mkdir -p $RAW_OUTPUT_DIR
 
 # Run command to generate our data set: 
-#$TOOL_DIR/dsdgen \
-#  -DISTRIBUTIONS $TOOL_DIR/tpcds.idx \
-#  -dir $RAW_OUTPUT_DIR \
-#  -scale $SCALE \
-#  -verbose Y \
-#  -force
+$TOOL_DIR/dsdgen \
+  -DISTRIBUTIONS $TOOL_DIR/tpcds.idx \
+  -dir $RAW_OUTPUT_DIR \
+  -scale $SCALE \
+  -verbose Y \
+  -force
 
 # Number of megabytes per file when splitting the raw TPC-DS source files into smaller chunks.
 # I chose 20M because, when compressed, this should typically give files > 1 MB (which is best practice), 
@@ -52,7 +55,7 @@ MEGABYTES_PER_RAW_FILE="20M"
 
 GZIP_OUTPUT_PREFIX=dataset/s3
 
-"" > load_tables.sql
+echo "" > load_tables.sql
 
 # Split each raw file into multiple GZIP'd files and upload to Amazon S3
 for RAW_FILE_PATH in $RAW_OUTPUT_DIR/*
@@ -71,7 +74,7 @@ do
   mkdir -p $GZIP_OUTPUT_DIR
   
   # Split our file into chunks, and process each chunk with GZIP
-  #split -C $MEGABYTES_PER_RAW_FILE --filter='gzip > $FILE.gz' $RAW_FILE_PATH $GZIP_OUTPUT_DIR
+  split -C $MEGABYTES_PER_RAW_FILE --filter='gzip > $FILE.gz' $RAW_FILE_PATH $GZIP_OUTPUT_DIR
 
   # Copy GZIP'd files to S3 path, which each table's files in its own prefix matching the table/filename: 
   aws s3 sync $GZIP_OUTPUT_DIR $S3_FULL_PATH/$FILENAME/
@@ -86,3 +89,25 @@ do
   echo $SQL >> load_tables.sql
 
 done
+
+QUERY_OUTPUT_DIR=$CURR_DIR/queries
+mkdir -p $QUERY_OUTPUT_DIR
+
+# Now, generate the test queries that we can later run in our Redshift cluster (after we've loaded the data):
+(cd $TOOL_DIR && ./dsqgen \
+-DIRECTORY ../query_templates \
+-INPUT ../query_templates/templates.lst \
+-VERBOSE Y \
+-QUALIFY Y \
+-SCALE 1 \
+-DIALECT oracle \
+-OUTPUT_DIR $QUERY_OUTPUT_DIR
+)
+
+echo ""
+echo "All done!"
+echo ""
+echo "Your data has been uploaded to S3."
+echo "Create your table schema with create-table-ddl.sql,"
+echo "import your data with load-tables.sql, and then"
+echo "use the test queries in the ./queries directory."

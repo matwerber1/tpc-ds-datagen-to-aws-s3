@@ -1,3 +1,7 @@
 dataset/
-tpc-ds/v2.11.0rc2/*
+queries/
 load_tables.sql
+# There are certain files I want to track and have already added, but I don't
+# want to track the results of my local 'make' command during testing, so after
+# I tracked files but before running make, I added line below. 
+tpc-ds/v2.11.0rc2/*
