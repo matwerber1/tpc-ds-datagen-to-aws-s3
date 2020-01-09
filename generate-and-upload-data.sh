@@ -103,7 +103,7 @@ mkdir -p $QUERY_OUTPUT_DIR
 -VERBOSE Y \
 -QUALIFY Y \
 -SCALE 1 \
--DIALECT oracle \
+-DIALECT netezza \
 -OUTPUT_DIR $QUERY_OUTPUT_DIR
 )
 
