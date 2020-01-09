@@ -23,3 +23,12 @@
   (cd tpc-ds/v2.11.0rc2/tools && make)
   ```
 
+4. Open `generate-and-upload-data.sh` and update the parameters at the top of the script as needed.
+
+5. Generate, split, compress, and upload data to S3:
+
+  ```sh
+  ./generate-and-upload-data.sh
+  ```
+
+

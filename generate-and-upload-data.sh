@@ -1,5 +1,8 @@
 #!/bin/bash
 
+########################
+# UPDATE THESE VARIABLES
+########################
 # The total uncompressed size in GB of the TPC-DS dataset you want to generate:
 SCALE=1
 
@@ -9,6 +12,9 @@ S3_BUCKET=s3://werberm-sandbox
 # Amazon S3 prefix to store results: 
 S3_USER_PREFIX=bigdata/tpc-ds
 
+####################################################################
+# DO NOT EDIT BELOW THIS LINE (UNLESS YOU WANT TO FURTHER CUSTOMIZE
+####################################################################
 S3_FULL_PATH=$S3_BUCKET/$S3_USER_PREFIX/${SCALE}gb
 
 # Get current directory (dsdgen needs full, not relative DIRs for the way we will use it): 
@@ -31,8 +37,10 @@ mkdir -p $RAW_OUTPUT_DIR
 #  -verbose Y \
 #  -force
 
-# Number of megabytes per file when splitting the raw TPC-DS source files into smaller chunks:
-MEGABYTES_PER_RAW_FILE="50M"
+# Number of megabytes per file when splitting the raw TPC-DS source files into smaller chunks.
+# I chose 20M because, when compressed, this should typically give files > 1 MB (which is best practice), 
+# while still generating lots of files (on larger data sets) so we can parallelize the load into Redshift
+MEGABYTES_PER_RAW_FILE="20M"
 
 GZIP_OUTPUT_PREFIX=dataset/s3
 
