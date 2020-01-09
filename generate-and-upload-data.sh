@@ -12,6 +12,10 @@ S3_BUCKET=s3://werberm-sandbox
 # Amazon S3 prefix to store results: 
 S3_USER_PREFIX=bigdata/tpc-ds
 
+# The full ARN of the IAM role that grants your Redshift cluster 
+# permission to read data from the S3 bucket/path you specified above:
+IAM_ROLE=arn:aws:iam::111111111111:role/RedshiftClusterRole
+
 ####################################################################
 # DO NOT EDIT BELOW THIS LINE (UNLESS YOU WANT TO FURTHER CUSTOMIZE
 ####################################################################
@@ -44,6 +48,8 @@ MEGABYTES_PER_RAW_FILE="20M"
 
 GZIP_OUTPUT_PREFIX=dataset/s3
 
+"" > load_tables.sql
+
 # Split each raw file into multiple GZIP'd files and upload to Amazon S3
 for RAW_FILE_PATH in $RAW_OUTPUT_DIR/*
 do
@@ -65,5 +71,14 @@ do
 
   # Copy GZIP'd files to S3 path, which each table's files in its own prefix matching the table/filename: 
   aws s3 sync $GZIP_OUTPUT_DIR $S3_FULL_PATH/$FILENAME/
+
+  # Our table name should match our filename; the variable below just makes this script more readable:
+  TABLE=$FILENAME
+
+  # Generate the SQL to load our data from S3 to Redshift.
+  SQL="copy $TABLE from '$S3_FULL_PATH/$FILENAME/' iam_role '$IAM_ROLE' gzip delimiter '|' COMPUPDATE ON region 'us-east-1';"
+
+  # Write SQL to our sql script: 
+  echo $SQL >> load_tables.sql
 
 done
