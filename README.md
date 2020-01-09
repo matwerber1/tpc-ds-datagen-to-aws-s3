@@ -1,3 +1,16 @@
+# Purpose
+
+Generate a TPC-DS dataset of arbitrary size and upload to Amazon Redshift. 
+
+This script splits your raw data into multiple files and then GZIPs each file before loadinf to Amazon S3. This speeds your upload to S3, reduces storage costs, and leads to faster import into Redshift. 
+
+This project also provides you with the DML and DDL to create tables in your cluster and load data from S3. 
+
+# Prerequisites
+
+1. AWS Redshift cluster with enough storage capacity to hold your data.
+2. An Amazon S3 bucket where you will upload your generated data and then from which you will load into Redshift. 
+
 # Instructions
 
 1. Optional - while you could generate your data set and upload to Amazon S3 from a local machine, you may be able to achieve faster results using an EC2 instance in AWS. If you want, deploy an EC2 instance with sufficient EBS (or even better, instance storage) to support the size of data set you plan to generate. Note that EBS IOPS scale with the size of your EBS volume, up to 3,000 IOPS for a 1 TB drive. Therefore, you might want to deploy a 1 TB drive even if your data set is smaller than 1 TB to improve performance (if using EBS instead of an instance store). Of course, consider the trade-off between performance and cost when choosing instance types and storage capacity. 
