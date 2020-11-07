@@ -2,7 +2,7 @@
 
 Generate a TPC-DS dataset of arbitrary size and upload to Amazon Redshift. 
 
-This script splits your raw data into multiple files and then GZIPs each file before loadinf to Amazon S3. This speeds your upload to S3, reduces storage costs, and leads to faster import into Redshift. 
+This script splits your raw data into multiple files and then GZIPs each file before loading to Amazon S3. This speeds your upload to S3, reduces storage costs, and leads to faster import into Redshift. 
 
 This project also provides you with the DML and DDL to create tables in your cluster and load data from S3. 
 
