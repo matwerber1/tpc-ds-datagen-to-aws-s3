@@ -11,15 +11,6 @@ This project also provides you with the DML and DDL to create tables in your clu
 1. AWS Redshift cluster with enough storage capacity to hold your data.
 2. An Amazon S3 bucket where you will upload your generated data and then from which you will load into Redshift. 
 
-# Note to Mac Users
-
-This project was built to run on Linux environments and tested on EC2.
-
-Based on user feedback, it does not work on Mac OS out of the box. I've since made changes based on the project below to make Mac work. I tested locally and it seems to work:
-https://github.com/gregrahn/tpcds-kit
-
-In order for this to work on Mac, you will need to install `gsplit` instead of the regular `split` built into Mac (the two are not the same). You can do this with `brew install coreutils`.
-
 # Instructions
 
 1. **For Mac users only**, run `brew install coreutils` to install `gsplit`, which we use to chunk our data files before uploading to S3.
