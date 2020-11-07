@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+clear
+
 ########################
 # UPDATE THESE VARIABLES
 ########################
@@ -7,21 +10,21 @@
 SCALE=1
 
 # Amazon S3 output bucket to store results (do not include trailing slash): 
-S3_BUCKET=s3://<YOUR_BUCKET>
+S3_BUCKET=s3://werberm-sandbox-us-west-2/tpc-ds
 
 # Set this to your bucket region (must be in same region as your cluster)
-BUCKET_REGION=us-east-1
+BUCKET_REGION=us-west-2
 
 # Amazon S3 prefix to store results. This will be added to the bucket path
 # above when determining where to upload your generated data. For example, if
 # your bucket is s3://my-bucket and your prefix (below) is my-tpc-data, your
 # final output will be in s3://my-bucket/my-tpc-data/*.
 # Below, do not include a trailing slash
-S3_USER_PREFIX=bigdata/tpc-ds
+S3_USER_PREFIX=
 
 # The full ARN of the IAM role that grants your Redshift cluster 
 # permission to read data from the S3 bucket/path you specified above:
-IAM_ROLE=arn:aws:iam::111111111111:role/RedshiftClusterRole
+IAM_ROLE=arn:aws:iam::544941453660:role/RedshiftClusterRole
 
 ####################################################################
 # DO NOT EDIT BELOW THIS LINE (UNLESS YOU WANT TO FURTHER CUSTOMIZE
@@ -44,17 +47,30 @@ RAW_OUTPUT_DIR=$CURR_DIR/dataset/raw
 mkdir -p $RAW_OUTPUT_DIR
 
 # Run command to generate our data set: 
-$TOOL_DIR/dsdgen \
-  -DISTRIBUTIONS $TOOL_DIR/tpcds.idx \
+echo Running dsdgen...
+(cd $TOOL_DIR && ./dsdgen \
   -dir $RAW_OUTPUT_DIR \
   -scale $SCALE \
   -verbose Y \
   -force
+)
 
 # Number of megabytes per file when splitting the raw TPC-DS source files into smaller chunks.
 # I chose 20M because, when compressed, this should typically give files > 1 MB (which is best practice), 
 # while still generating lots of files (on larger data sets) so we can parallelize the load into Redshift
 MEGABYTES_PER_RAW_FILE="20M"
+
+# If the OS is Mac, then the built-in Mac "split" command is not compatible with the Linux split command.
+# In that case, we will later call gsplit (Linux compatible) instead of the regular split:
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     machine=Linux;;
+    Darwin*)    machine=Mac;;
+    CYGWIN*)    machine=Cygwin;;
+    MINGW*)     machine=MinGw;;
+    *)          machine="UNKNOWN:${unameOut}"
+esac
+echo ${machine}
 
 GZIP_OUTPUT_PREFIX=dataset/s3
 
@@ -77,7 +93,12 @@ do
   mkdir -p $GZIP_OUTPUT_DIR
   
   # Split our file into chunks, and process each chunk with GZIP
-  split -C $MEGABYTES_PER_RAW_FILE --filter='gzip > $FILE.gz' $RAW_FILE_PATH $GZIP_OUTPUT_DIR
+  if [ $machine == "Mac" ]
+  then
+    gsplit -C $MEGABYTES_PER_RAW_FILE --filter='gzip > $FILE.gz' $RAW_FILE_PATH $GZIP_OUTPUT_DIR
+  else
+    split -C $MEGABYTES_PER_RAW_FILE --filter='gzip > $FILE.gz' $RAW_FILE_PATH $GZIP_OUTPUT_DIR
+  fi
 
   # Copy GZIP'd files to S3 path, which each table's files in its own prefix matching the table/filename: 
   aws s3 sync $GZIP_OUTPUT_DIR $S3_FULL_PATH/$FILENAME/
