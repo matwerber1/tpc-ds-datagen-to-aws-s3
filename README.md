@@ -6,6 +6,14 @@ This script splits your raw data into multiple files and then GZIPs each file be
 
 This project also provides you with the DML and DDL to create tables in your cluster and load data from S3. 
 
+# AWS Official Alternative
+
+AWS has already created TPC-DS datasets in 3 TB, 10 TB, 30 TB, and 100 TB sizes and made the data available in public buckets. You can easily use/import these to your cluster:
+
+https://github.com/awslabs/amazon-redshift-utils/tree/master/src/CloudDataWarehouseBenchmark/Cloud-DWB-Derived-from-TPCDS
+
+If you want to use a different data size, this project can help with that.
+
 # Prerequisites
 
 1. AWS Redshift cluster with enough storage capacity to hold your data.
