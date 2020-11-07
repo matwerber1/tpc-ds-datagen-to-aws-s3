@@ -11,6 +11,11 @@ This project also provides you with the DML and DDL to create tables in your clu
 1. AWS Redshift cluster with enough storage capacity to hold your data.
 2. An Amazon S3 bucket where you will upload your generated data and then from which you will load into Redshift. 
 
+# Thanks
+
+Thanks to @gregrahn. I used his project below to identify the changes that make this work on Mac OS: 
+https://github.com/matwerber1/tpc-ds-datagen-to-aws-s3
+
 # Instructions
 
 1. **For Mac users only**, run `brew install coreutils` to install `gsplit`, which we use to chunk our data files before uploading to S3.
