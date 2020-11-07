@@ -37,7 +37,6 @@
 /*** includes ***/
 #include <stdlib.h>
 #ifndef USE_STDLIB_H
-#include <malloc.h>
 #endif
 #include <stdio.h>
 #include <math.h>

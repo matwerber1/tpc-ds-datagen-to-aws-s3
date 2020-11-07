@@ -11,7 +11,18 @@ This project also provides you with the DML and DDL to create tables in your clu
 1. AWS Redshift cluster with enough storage capacity to hold your data.
 2. An Amazon S3 bucket where you will upload your generated data and then from which you will load into Redshift. 
 
+# Note to Mac Users
+
+This project was built to run on Linux environments and tested on EC2.
+
+Based on user feedback, it does not work on Mac OS out of the box. I've since made changes based on the project below to make Mac work. I tested locally and it seems to work:
+https://github.com/gregrahn/tpcds-kit
+
+In order for this to work on Mac, you will need to install `gsplit` instead of the regular `split` built into Mac (the two are not the same). You can do this with `brew install coreutils`.
+
 # Instructions
+
+1. **For Mac users only**, run `brew install coreutils` to install `gsplit`, which we use to chunk our data files before uploading to S3.
 
 1. Optional - while you could generate your data set and upload to Amazon S3 from a local machine, you may be able to achieve faster results using an EC2 instance in AWS. If you want, deploy an EC2 instance with sufficient EBS (or even better, instance storage) to support the size of data set you plan to generate. Note that EBS IOPS scale with the size of your EBS volume, up to 3,000 IOPS for a 1 TB drive. Therefore, you might want to deploy a 1 TB drive even if your data set is smaller than 1 TB to improve performance (if using EBS instead of an instance store). Of course, consider the trade-off between performance and cost when choosing instance types and storage capacity. 
 
@@ -26,7 +37,7 @@ This project also provides you with the DML and DDL to create tables in your clu
 
     ```sh
     # tpc-ds/v2.11.0rc2/tools/makefile
-    # OS Values: AIX, LINUX, SOLARIS, NCR, HPUX
+    # OS Values: AIX, LINUX, SOLARIS, NCR, HPUX, or MACOS
     OS = LINUX 
     ```
 
@@ -42,6 +53,7 @@ This project also provides you with the DML and DDL to create tables in your clu
     SCALE=1
     S3_BUCKET=s3://<YOUR_BUCKET>
     S3_USER_PREFIX=<YOUR_PREFIX>
+    BUCKET_REGION=<YOUR_BUCKET_REGION>
     IAM_ROLE=<YOUR_IAM_ROLE>
     ```
 

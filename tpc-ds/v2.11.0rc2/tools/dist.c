@@ -38,7 +38,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <assert.h>
-#include <malloc.h>
 #ifdef WIN32
 #include <io.h>
 #include <stdlib.h>
@@ -52,7 +51,7 @@
 #include <sys/types.h>
 #endif
 #ifndef USE_STDLIB_H
-#include <malloc.h>
+#include <malloc.h>	-- removed to compile for mac
 #endif
 #include "config.h"
 #include "decimal.h"
