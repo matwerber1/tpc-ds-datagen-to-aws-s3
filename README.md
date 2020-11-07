@@ -14,7 +14,7 @@ This project also provides you with the DML and DDL to create tables in your clu
 # Thanks
 
 Thanks to @gregrahn. I used his project below to identify the changes that make this work on Mac OS: 
-https://github.com/matwerber1/tpc-ds-datagen-to-aws-s3
+https://github.com/gregrahn/tpcds-kit
 
 # Instructions
 
