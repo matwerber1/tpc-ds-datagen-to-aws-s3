@@ -37,7 +37,7 @@ In order for this to work on Mac, you will need to install `gsplit` instead of t
 
     ```sh
     # tpc-ds/v2.11.0rc2/tools/makefile
-    # OS Values: AIX, LINUX, SOLARIS, NCR, HPUX
+    # OS Values: AIX, LINUX, SOLARIS, NCR, HPUX, or MACOS
     OS = LINUX 
     ```
 
@@ -53,6 +53,7 @@ In order for this to work on Mac, you will need to install `gsplit` instead of t
     SCALE=1
     S3_BUCKET=s3://<YOUR_BUCKET>
     S3_USER_PREFIX=<YOUR_PREFIX>
+    BUCKET_REGION=<YOUR_BUCKET_REGION>
     IAM_ROLE=<YOUR_IAM_ROLE>
     ```
 
